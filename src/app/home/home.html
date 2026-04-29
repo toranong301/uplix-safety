@@ -1,0 +1,127 @@
+<section
+  class="hero"
+  [style.background-image]="
+    'linear-gradient(90deg, rgba(4, 13, 20, 0.86), rgba(4, 13, 20, 0.34)), url(' +
+    promotions[activePromotion()].imageUrl +
+    ')'
+  "
+>
+  <div class="hero__content">
+    <p>{{ promotions[activePromotion()].eyebrow }}</p>
+    <h1>{{ promotions[activePromotion()].title }}</h1>
+    <span>{{ promotions[activePromotion()].description }}</span>
+    <a class="hero__action" href="#ppe-catalog">{{ promotions[activePromotion()].cta }}</a>
+  </div>
+
+  <div class="hero__slides" aria-label="Promotion slides">
+    @for (promotion of promotions; track promotion.title; let index = $index) {
+      <button
+        type="button"
+        [class.is-active]="activePromotion() === index"
+        (click)="setActivePromotion(index)"
+        [attr.aria-label]="'Show promotion ' + (index + 1)"
+      ></button>
+    }
+  </div>
+</section>
+
+<section id="ppe-catalog" class="visual-catalog visual-catalog--ppe">
+  <div class="section-title">
+    <h2>PPE Catalog</h2>
+  </div>
+  <nav class="icon-tabs" aria-label="PPE categories">
+    @for (category of ppeCategories; track category.slug) {
+      <button
+        type="button"
+        [class.is-active]="activePpeCategory() === category.slug"
+        (click)="setActivePpeCategory(category.slug)"
+      >
+        <span class="tab-image" [attr.data-icon]="category.slug">
+          <img [src]="category.imageUrl" [alt]="category.name" loading="lazy" (error)="hideBrokenImage($event)" />
+        </span>
+        <small>{{ category.name }}</small>
+      </button>
+    }
+  </nav>
+
+  <h2>{{ selectedPpeCategory()?.name }}</h2>
+
+  <div class="product-grid product-grid--sample">
+    @for (product of visiblePpeProducts(); track product.slug) {
+      <a class="product-card" [routerLink]="['/products', product.slug]">
+        <span class="product-image" [attr.data-icon]="product.categorySlug">
+          <img [src]="product.imageUrl" [alt]="product.name" loading="lazy" (error)="hideBrokenImage($event)" />
+          <i aria-hidden="true"></i>
+        </span>
+        <span class="product-copy">
+          <strong>{{ product.name }}</strong>
+        </span>
+        <span class="detail-button">อ่านรายละเอียด</span>
+      </a>
+    }
+  </div>
+
+  @if (ppePages().length > 1) {
+    <div class="page-dots" aria-label="Product pages">
+      @for (page of ppePages(); track page) {
+        <button
+          type="button"
+          [class.is-active]="activePpePage() === page"
+          (click)="setActivePpePage(page)"
+          [attr.aria-label]="'Show product page ' + (page + 1)"
+        ></button>
+      }
+    </div>
+  }
+</section>
+
+<section id="fire-service" class="visual-catalog visual-catalog--fire">
+  <div class="section-title">
+    <h2>Fire Extinguisher & Refill Service</h2>
+  </div>
+
+  <nav class="icon-tabs icon-tabs--center" aria-label="Fire extinguisher and refill service categories">
+    @for (category of fireServiceCategories; track category.slug) {
+      <button
+        type="button"
+        [class.is-active]="activeFireServiceCategory() === category.slug"
+        (click)="setActiveFireServiceCategory(category.slug)"
+      >
+        <span class="tab-image" [attr.data-icon]="category.slug">
+          <img [src]="category.imageUrl" [alt]="category.name" loading="lazy" />
+        </span>
+        <small>{{ category.name }}</small>
+      </button>
+    }
+  </nav>
+
+  <h3>{{ selectedFireServiceCategory()?.name }}</h3>
+
+  <div class="product-grid product-grid--service">
+    @for (product of visibleFireServiceProducts(); track product.slug) {
+      <a class="product-card product-card--service" [routerLink]="['/products', product.slug]">
+        <span class="product-image" [attr.data-icon]="product.categorySlug">
+          <img [src]="product.imageUrl" [alt]="product.name" loading="lazy" (error)="hideBrokenImage($event)" />
+          <i aria-hidden="true"></i>
+        </span>
+        <span class="product-copy">
+          <strong>{{ product.name }}</strong>
+        </span>
+        <span class="detail-button">อ่านรายละเอียด</span>
+      </a>
+    }
+  </div>
+
+  @if (fireServicePages().length > 1) {
+    <div class="page-dots" aria-label="Fire service pages">
+      @for (page of fireServicePages(); track page) {
+        <button
+          type="button"
+          [class.is-active]="activeFireServicePage() === page"
+          (click)="setActiveFireServicePage(page)"
+          [attr.aria-label]="'Show fire service page ' + (page + 1)"
+        ></button>
+      }
+    </div>
+  }
+</section>

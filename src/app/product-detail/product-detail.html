@@ -1,0 +1,54 @@
+@if (product(); as product) {
+  <section class="detail-hero">
+    <div class="detail-hero__media">
+      <img [src]="product.imageUrl" [alt]="product.name" (error)="hideBrokenImage($event)" />
+      <strong>{{ product.name }}</strong>
+    </div>
+    <div class="detail-hero__content">
+      <a routerLink="/" class="back-link">Back to catalog</a>
+      <p>{{ category()?.name }}</p>
+      <h1>{{ product.name }}</h1>
+      <span>{{ product.description }}</span>
+    </div>
+  </section>
+
+  <section class="detail-body">
+    <div class="detail-panel">
+      <h2>Key Features</h2>
+      <ul>
+        @for (feature of product.features; track feature) {
+          <li>{{ feature }}</li>
+        }
+      </ul>
+    </div>
+
+    <div class="detail-panel">
+      <h2>Applications</h2>
+      <ul>
+        @for (application of product.applications; track application) {
+          <li>{{ application }}</li>
+        }
+      </ul>
+    </div>
+  </section>
+
+  @if (relatedProducts().length) {
+    <section class="related">
+      <h2>Related products</h2>
+      <div>
+        @for (related of relatedProducts(); track related.slug) {
+          <a [routerLink]="['/products', related.slug]">
+            <img [src]="related.imageUrl" [alt]="related.name" loading="lazy" (error)="hideBrokenImage($event)" />
+            <span>{{ related.name }}</span>
+          </a>
+        }
+      </div>
+    </section>
+  }
+} @else {
+  <section class="not-found">
+    <h1>Product not found</h1>
+    <p>The product may have moved or is not available in this catalog.</p>
+    <a routerLink="/">Back to catalog</a>
+  </section>
+}
